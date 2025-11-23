@@ -8,11 +8,13 @@ namespace JobMatching.Domain.Entities
     public class UserSkill
     {
         [Key]
+        [JsonIgnore]
         public int Id { get; set; }
 
         [Column("skill")]
         public string SkillName { get; set; }
 
+        [JsonIgnore]
         [Column("ID_USER")]
         public int UserId { get; set; }
 

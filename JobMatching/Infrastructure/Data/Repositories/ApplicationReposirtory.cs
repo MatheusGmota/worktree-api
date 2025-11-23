@@ -16,10 +16,25 @@ namespace JobMatching.Infrastructure.Data.Repositories
 
         public async Task<ApplicationEntity?> Adicionar(ApplicationEntity entity)
         {
+            var existingApplication = await _context.Application
+                .FirstOrDefaultAsync(a =>
+                    a.JobId == entity.JobId &&
+                    a.CandidateId == entity.CandidateId);
+
+            if (existingApplication != null)
+            {
+                return null;
+            }
+
             _context.Application.Add(entity);
             await _context.SaveChangesAsync();
 
-            return entity;
+            var result = await _context.Application
+                .Include(a => a.Job)
+                .Include(a => a.Candidate)
+                .FirstOrDefaultAsync(a => a.Id == entity.Id);
+
+            return result;
         }
 
         public async Task<ApplicationEntity?> Atualizar(int id, ApplicationEntity entity)
@@ -28,8 +43,6 @@ namespace JobMatching.Infrastructure.Data.Repositories
 
             if (existingEntity is not null)
             {
-                // **Observação:** Copiar propriedades manualmente ou usar um mapeador (como AutoMapper) é mais seguro.
-                // Aqui estamos apenas atualizando a entidade rastreada com os novos valores.
                 _context.Entry(existingEntity).CurrentValues.SetValues(entity);
 
                 existingEntity.Id = id;
@@ -55,7 +68,6 @@ namespace JobMatching.Infrastructure.Data.Repositories
 
         public async Task<ApplicationEntity?> ObterPorId(int id)
         {
-            // Incluindo navegação para Job e Candidate, se necessário para o DTO de resposta
             return await _context.Application
                 .Include(a => a.Job)
                 .Include(a => a.Candidate)

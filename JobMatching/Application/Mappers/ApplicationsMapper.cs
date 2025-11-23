@@ -27,7 +27,7 @@ namespace JobMatching.Application.Mappers
                 Id: entity.Id,
                 coverLetter: entity.CoverLetter,
                 Job: entity.Job.ToDto(),
-                Candidate: entity.Candidate.ToDto()
+                Candidate: entity.Candidate.ToDto(),
                 Status: entity.Status
             );
         }

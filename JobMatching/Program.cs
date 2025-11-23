@@ -117,6 +117,8 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseMiddleware<TracingMiddleware>();
+
 app.UseResponseCompression();
 
 app.UseRateLimiter();

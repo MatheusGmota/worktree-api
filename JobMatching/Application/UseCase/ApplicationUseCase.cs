@@ -28,7 +28,7 @@ namespace JobMatching.Application.UseCase
             }
             catch (Exception ex)
             {
-                return OperationResult<ApplicationResponseDto?>.Failure("Erro interno ao adicionar aplicação.");
+                return OperationResult<ApplicationResponseDto?>.Failure("Erro interno ao adicionar aplicação."+ex.Message);
             }
         }
 
