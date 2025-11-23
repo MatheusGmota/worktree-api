@@ -24,11 +24,10 @@ namespace JobMatching.Application.Mappers
             }
 
             return new ApplicationResponseDto(
-                Id: (int)entity.Id,
+                Id: entity.Id,
                 coverLetter: entity.CoverLetter,
                 Job: entity.Job.ToDto(),
-                Candidate: entity.Candidate.ToDto(),
-
+                Candidate: entity.Candidate.ToDto()
                 Status: entity.Status
             );
         }

@@ -19,20 +19,16 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// =========================================================================
-// 1. Configuração de Serviços (DI)
-// =========================================================================
-
-// Configuração do Contexto de Dados
 builder.Services.AddDbContext<ApplicationContext>(x => {
     x.UseOracle(builder.Configuration.GetConnectionString("Oracle"));
 });
 
-// Injeção de Dependência (Repositories e Use Cases)
 builder.Services.AddTransient<IJobRepository, JobRepository>();
 builder.Services.AddTransient<IJobUseCase, JobUseCase>();
 builder.Services.AddTransient<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddTransient<IApplicationUseCase, ApplicationUseCase>();
+builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<IUserUseCase, UserUseCase>();
 
 // Health Checks
 builder.Services.AddHealthChecks()
@@ -76,11 +72,6 @@ builder.Services.AddRateLimiter(options =>
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
-
-// =========================================================================
-// 2. Configuração de API Versioning e Swagger (Corrigido)
-// =========================================================================
-
 // Configuração do Versionamento da API
 builder.Services.AddApiVersioning(options =>
 {
@@ -97,23 +88,12 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-// Configuração do SwaggerGen para API Versioning
-// Esta classe (ConfigureSwaggerOptions) cria o OpenApiInfo para cada versão,
-// o que resolve o erro "valid version field".
 builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
-// Adiciona o serviço principal do Swagger, que agora usará a configuração injetada acima.
 builder.Services.AddSwaggerGen();
-
-// Adiciona suporte a filtros de exemplo e anotações (via ConfigureSwaggerOptions)
 builder.Services.AddSwaggerExamplesFromAssemblyOf<Program>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddControllers();
-
-
-// =========================================================================
-// 3. Pipeline de Requisição (Middleware)
-// =========================================================================
 
 var app = builder.Build();
 

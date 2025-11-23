@@ -1,5 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace JobMatching.Domain.Entities
 {
@@ -15,6 +16,7 @@ namespace JobMatching.Domain.Entities
         [Column("ID_USER")]
         public int UserId { get; set; }
 
+        [JsonIgnore]
         public UserEntity User { get; set; }
     }
 }

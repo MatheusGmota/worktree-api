@@ -10,6 +10,8 @@ namespace JobMatching.Infrastructure.Data.AppData
         }
 
         public DbSet<JobEntity> Job {get; set;}
+        public DbSet<UserEntity> User {get; set;}
+        public DbSet<UserSkill> UserSkill {get; set;}
         public DbSet<ApplicationEntity> Application {get; set;}
     }
 }
