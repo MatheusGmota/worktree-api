@@ -26,31 +26,21 @@ namespace dashmottu.API.Infrastructure.Data.Repositories
         {
             var result = await _context.Job.FirstOrDefaultAsync(x => x.Id == id);
 
-            if (result is not null)
+            if (result is null)
             {
-                if (result is null)
-                {
-                    result = new JobEntity
-                    {
-                        Id = entity.Id,
-                        Category = entity.Category,
-                        Company = entity.Company,
-                        Description = entity.Description,
-                        Location = entity.Location,
-                        Salary = entity.Salary,
-                        Title = entity.Title,
-                        Type = entity.Type
-                    };
-                }
-                else
-                    result = entity;
-
-                _context.Job.Update(entity);
-                await _context.SaveChangesAsync();
-
-                return result;
+                return null;
             }
-            return null;
+
+            result.Category = entity.Category;
+            result.Company = entity.Company;
+            result.Description = entity.Description;
+            result.Location = entity.Location;
+            result.Salary = entity.Salary;
+            result.Title = entity.Title;
+            result.Type = entity.Type;
+            await _context.SaveChangesAsync();
+
+            return result;
         }
 
         public async Task<JobEntity?> Deletar(int id)

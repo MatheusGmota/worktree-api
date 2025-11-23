@@ -1,4 +1,5 @@
-﻿using JobMatching.Application.DTOs;
+﻿using Asp.Versioning;
+using JobMatching.Application.DTOs;
 using JobMatching.Application.Interfaces;
 using JobMatching.Doc.Samples;
 using JobMatching.Domain.Entities;
@@ -6,11 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using Swashbuckle.AspNetCore.Filters;
 
-namespace JobMatching.Controllers
+namespace JobMatching.Controllers.v1
 {
+    [ApiVersion(1)] //Usando a lib Asp.Versioning.Mvc
+    [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [Route("api/[controller]")]
-    public class JobController : Controller
+    public class JobController : ControllerBase
     {
         private readonly ILogger<JobController> _logger;
         private readonly IJobUseCase _jobUseCase;
@@ -26,6 +28,7 @@ namespace JobMatching.Controllers
         [SwaggerResponseExample(200, typeof(JobResponseDtoExample))]
         public async Task<IActionResult> GetById(int id)
         {
+            _logger.LogInformation("Usando api na versão v1");
             _logger.LogInformation("Getting job with id: {id}", id);
 
 
@@ -45,6 +48,7 @@ namespace JobMatching.Controllers
         [SwaggerResponseExample(201, typeof(JobResponseDtoExample))]
         public async Task<IActionResult> Add([FromBody] JobRequestDto dto)
         {
+            _logger.LogInformation("Usando api na versão v1");
             var resultado = await _jobUseCase.Adicionar(dto);
             if (!resultado.IsSuccess)
             {
@@ -60,6 +64,7 @@ namespace JobMatching.Controllers
         [SwaggerResponseExample(200, typeof(JobResponseDtoExample))]
         public async Task<IActionResult> Edit(int id, [FromBody] JobRequestDto dto)
         {
+            _logger.LogInformation("Usando api na versão v1");
             _logger.LogInformation("Getting job with id: {id}", id);
 
             var resultado = await _jobUseCase.Editar(id, dto);
@@ -76,6 +81,7 @@ namespace JobMatching.Controllers
         [SwaggerResponse(200, "Vaga deletada com sucesso", typeof(JobEntity))]
         public async Task<IActionResult> Delete(int id)
         {
+            _logger.LogInformation("Usando api na versão v1");
             _logger.LogInformation("Getting job with id: {id}", id);
 
             var resultado = await _jobUseCase.Deletar(id);
